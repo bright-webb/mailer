@@ -1,0 +1,21 @@
+{
+    "name": "brightwebb/phpmailer",
+    "description": "Send mass email in php",
+    "type": "project",
+    "require": {
+        "mailjet/mailjet-swiftmailer": "^2.0",
+        "swiftmailer/swiftmailer": "^6.3",
+        "symfony/mailer": "^7.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Brightwebb\\Phpmailer\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "bright-webb",
+            "email": "webilorbright@outlook.com"
+        }
+    ]
+}

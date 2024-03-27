@@ -1,0 +1,34 @@
+{
+    "name": "mailjet/mailjet-swiftmailer",
+    "description": "A SwiftMailer transport implementation for Mailjet",
+    "type": "library",
+    "keywords": ["mailjet", "swiftmailer"],
+    "homepage": "https://github.com/mailjet/MailjetSwiftMailer",
+    "require": {
+        "php": ">=7.0",
+        "mailjet/mailjet-apiv3-php": "^1.2",
+        "swiftmailer/swiftmailer": "~6.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^5.7",
+        "symfony/config": ">=2.0|~3.0"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Titouan BENOIT",
+            "email": "titouan.benoit@gmx.fr",
+            "homepage": "https://github.com/Nightbr"
+        },
+        {
+            "name": "Mailjet API",
+            "email": "api@mailjet.com",
+            "homepage": "https://dev.mailjet.com/"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Mailjet\\MailjetSwiftMailer\\": ""
+        }
+    }
+}

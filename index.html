@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Send email</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.ckeditor.com/ckeditor5/41.2.1/classic/ckeditor.js"></script>
+</head>
+<body>
+    <div class="container" style="margin-top: 100px">
+        <div class="row d-flex justify-content-center">
+            <div class="col-md-8">
+                <h2>Send email</h2><hr />
+                <form id="sendEmailForm">
+                    <div class="form-group">
+                        <label for="recipient">Recipient</label>
+                        <div class="row">
+                            <div class="col-md-10">
+                                <input type="text" class="form-control" id="email" name="email">
+                            </div>
+                            <div class="col-md-2">
+                                <button type="button" class="btn btn-primary" id="import">Import</button>
+                            </div>
+                            </div>
+                            <small id="recipientHelp" class="form-text text-muted">You can enter multiple emails and seperate them with comma</small>
+                        </div>
+                        
+    
+                    <div class="form-group">
+                        <label for="subject">Subject</label>
+                        <input type="text" class="form-control" id="subject" name="subject">
+                    </div>
+                    <div class="form-group">
+                        <label for="from">From</label>
+                        <input type="text" class="form-control" id="from" name="from">
+                    </div>
+                    <div class="form-group">
+                        <label for="from">Name</label>
+                        <input type="text" class="form-control" id="from" name="name">
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea name="message" class="form-control"></textarea>
+                        <!-- <div id="editor"></div> -->
+                        <!-- uncomment the line below if you wish to use rich text editor -->
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary" id="sendEmail">Send</button>
+                        <button type="button" class="btn btn-secondary" id="clearForm">Clear</button>
+                    </div>
+                    </div>  
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $('#import').on('click', function(){
+            const input = $(`<input type="file" name="email_csv" id="email_csv" accept=".csv" style="visibility: hidden" />`);
+            input.trigger("click");
+            input.on("change", function(){
+                const file = this.files[0];
+                const reader = new FileReader();
+
+                // Get the file name and display it in the input field
+                $('#email').val(file.name);
+
+                // Append the input field to the form
+                $('#sendEmailForm').append(input);
+            })
+        })
+
+        $('#sendEmailForm').on('submit', function(e){
+            // Prevent the default form submission behavior
+            e.preventDefault();
+            // Append the editor data to the form data
+            const formData = new FormData($(this)[0]);
+            
+
+            const button = $(this).find('button');
+            button.prop('disabled', true);
+
+            // Send the form data via AJAX
+            $.ajax({
+                method: "POST",
+                url: "inc/send.php",
+                data: formData,
+                cache: false,
+                processData: false,
+                contentType: false,
+                dataType: 'json',
+                success: function(response){
+                    console.log(typeof response);
+                    if (response.errors && response.errors.length > 0) {
+                        // Display each error message to the user
+                        response.errors.forEach(function(error) {
+                            alert(error);
+                        });
+                    } else if (response.success) {
+                        // Handle success response if needed
+                        alert('Email(s) sent successfully.');
+                    } else {
+                        // Handle unexpected response
+                        alert('Unexpected response from the server.');
+                    }
+                },
+                error: function(){
+                    alert('Something went wrong');
+                },
+                complete: function(){
+                    button.prop('disabled', false);
+                }
+            });
+
+            return false; // Prevent the form from submitting normally
+        });
+    
+
+    // uncomment the line below if you wish to use rich text editor
+
+    /*
+    
+        ClassicEditor
+    .create(document.querySelector('#editor'))
+    .then(editor => {
+        $('#sendEmailForm').on('submit', function(e){
+            // Prevent the default form submission behavior
+            e.preventDefault();
+
+            // Get the editor data
+            const editorData = editor.getData();
+
+            // Append the editor data to the form data
+            const formData = new FormData($(this)[0]);
+            formData.append('message', editorData);
+
+            // const formData = $(this).serialize() + '&message=' + encodeURIComponent(editorData);
+
+            const button = $(this).find('button');
+            button.prop('disabled', true);
+
+            // Send the form data via AJAX
+            $.ajax({
+                method: "POST",
+                url: "inc/send.php",
+                data: formData,
+                cache: false,
+                processData: false,
+                contentType: false,
+                dataType: 'json',
+                success: function(response){
+                    console.log(typeof response);
+                    if (response.errors && response.errors.length > 0) {
+                        // Display each error message to the user
+                        response.errors.forEach(function(error) {
+                            alert(error);
+                        });
+                    } else if (response.success) {
+                        // Handle success response if needed
+                        alert('Email(s) sent successfully.');
+                    } else {
+                        // Handle unexpected response
+                        alert('Unexpected response from the server.');
+                    }
+                },
+                error: function(){
+                    alert('Something went wrong');
+                },
+                complete: function(){
+                    button.prop('disabled', false);
+                }
+            });
+
+            return false; // Prevent the form from submitting normally
+        });
+    })
+    .catch(error => {
+        console.error(error);
+    });
+    */
+
+    </script>
+</body>
+</html>
